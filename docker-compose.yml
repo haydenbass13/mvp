@@ -1,8 +1,8 @@
 version: 2
 services:
   postgres:
-    image: betsy_kart:latest
+    image: you-glow-girl:latest
     ports:
-      - 5432:5432
+      - 3000:3000
     volumes:
       - ./database/data/pg:/var/lib/postgresql/data
