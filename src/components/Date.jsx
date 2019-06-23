@@ -2,23 +2,64 @@ import React from "react";
 import styled from "styled-components";
 import { transform } from "@babel/core";
 
+// const Div = styled.div`
+
+// `
+
 const Day = props => {
+  let color = "white";
+  if (props.value === true) color = "red";
   var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  return (
+  return props.date.getDate() >= new Date().getDate() ? (
     <div
-      className={props.index}
+      id={props.index}
+      className={color}
       style={{
         backgroundColor: "",
         borderStyle: "solid",
         borderWidth: 1,
         height: "auto",
-        fontSize: 25,
         verticalAlign: "center"
       }}
       onClick={props.click}
     >
-      <p className={props.index}>{days[props.date.getDay()]}</p>
-      <h2 className={props.index}>{props.date.getDate()}</h2>
+      <p
+        style={{ fontSize: 20, marginBottom: 5, marginTop: 5 }}
+        id={props.index}
+      >
+        {days[props.date.getDay()]}
+      </p>
+      <p
+        style={{ marginTop: 1, marginBottom: 0, fontSize: 40 }}
+        id={props.index}
+      >
+        {props.date.getDate()}
+      </p>
+    </div>
+  ) : (
+    <div
+      id={props.index}
+      className={color}
+      style={{
+        backgroundColor: "gray",
+        borderStyle: "solid",
+        borderWidth: 1,
+        height: "auto",
+        verticalAlign: "center"
+      }}
+    >
+      <p
+        style={{ fontSize: 20, marginBottom: 5, marginTop: 5 }}
+        id={props.index}
+      >
+        {days[props.date.getDay()]}
+      </p>
+      <p
+        style={{ marginTop: 1, marginBottom: 0, fontSize: 40 }}
+        id={props.index}
+      >
+        {props.date.getDate()}
+      </p>
     </div>
   );
 };

@@ -41,7 +41,7 @@ const serverConfig = {
 const clientConfig = {
   entry: {
     vendor: ["@babel/polyfill", "react"],
-    app: ["./src/index.js"],
+    app: ["./src/"],
   },
   output: {
     path: path.resolve(__dirname, "public"),
@@ -68,7 +68,7 @@ const clientConfig = {
         exclude: /node_modules/
       },
       {
-        test: /\.(less\css)$/,
+        test: /\.(less|css)$/,
         use: ["style-loader", "css-loader", "less-loader"]
       },
       {
@@ -97,7 +97,10 @@ const clientConfig = {
     react: "React",
     "react-dom": "ReactDOM",
     "styled-components": "window.styled"
-  }
+  },
+  node: {
+    fs: "empty"
+ }
 };
 
 module.exports = [serverConfig, clientConfig];
