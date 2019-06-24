@@ -5,21 +5,18 @@ import { renderToString } from "react-dom/server";
 import hbs from "handlebars";
 import serialize from "serialize-javascript";
 import appointmentsByMonth from "../models/index";
-
+const { Appointments } = require("../../../database/index");
 const router = express.Router();
 
 router.get("/:id", async (req, res) => {
   await appointmentsByMonth(Number(req.params.id), response => {
-    console.log(response[0][0])
     res.send(response[0]);
   });
 });
 
-
 router.get("/", async (req, res) => {
   let month = new Date().getMonth();
   await appointmentsByMonth(month, response => {
-    console.log(response[0][0])
     const theHtml = `
   <head>
   <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
@@ -41,14 +38,23 @@ router.get("/", async (req, res) => {
     res.set("Access-Control-Allow-Origin", "http://localhost:3000");
     res.status(200).send(htmlToSend);
   });
+});
+router.post("/", (req, res) => {
+  res.send("router post working");
+});
 
-  router.post("/", (req, res) => {
-    res.send("router post working");
-  });
-
-  router.put("/", (req, res) => {
-    res.send("router put working");
-  });
+router.put("/", (req, res) => {
+  let appointment = req.body.appointment;
+  Appointments.update(
+    {
+      firstName: `${appointment.firstName}`,
+      lastName: `${appointment.lastName}`,
+      booked: true,
+      phone: `${appointment.phone}`
+    },
+    { where: { id: appointment.id } }
+  );
+  res.send("router put working");
 });
 
 export default router;

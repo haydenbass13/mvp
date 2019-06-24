@@ -30,7 +30,8 @@ const seedPostgres = async i => {
         date: await new Date(year, month, j, time),
         booked: randomizer(),
         firstName: null,
-        lastName: null
+        lastName: null,
+        phone: null,
       };
 
       days.push(day);

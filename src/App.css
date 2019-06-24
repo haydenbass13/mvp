@@ -22,7 +22,8 @@ flex-wrap: wrap;
   background-color: rgb(244, 75, 75);
   margin: 10px;
   vertical-align: middle;
-  font-size: 18px
+  font-size: 18px;
+  
 }
 .timepicker:hover{
   background-color: rgb(210, 64, 64);

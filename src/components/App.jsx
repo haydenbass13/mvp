@@ -5,6 +5,7 @@ import Day from "./Date";
 import { relative } from "path";
 import TimePicker from "./ApointmentTime";
 import axios from "axios";
+import PersonalInfo from "./Info";
 
 class App extends React.Component {
   constructor(props) {
@@ -14,9 +15,13 @@ class App extends React.Component {
       month: null,
       selected: null,
       datesByMonth: [],
-      appointmentsByMonth: this.props.schedule
+      appointmentsByMonth: this.props.schedule,
+      selectedTime: null
     };
     this.onSelect = this.onSelect.bind(this);
+    this.selectTime = this.selectTime.bind(this);
+    this.back = this.back.bind(this)
+    this.submit = this.submit.bind(this)
   }
 
   componentDidMount() {
@@ -44,7 +49,6 @@ class App extends React.Component {
       datesByMonth,
       selected: new Date().getDate() - 1
     });
-
   }
 
   onSelect(e) {
@@ -55,8 +59,13 @@ class App extends React.Component {
     this.setState({ datesByMonth: dates, selected: index + 1 });
   }
 
+  selectTime(time) {
+    console.log(time);
+    this.setState({ selectedTime: time });
+  }
+
   async componentDidUpdate(prevProps, prevState) {
-    if (this.state.month !== prevState.month) {
+    if (prevState && this.state.month !== prevState.month || !this.state.appointmentsByMonth.length) {
       let datesByMonth = [];
       let days = this.state.dates;
       let month = this.state.month;
@@ -65,7 +74,7 @@ class App extends React.Component {
           datesByMonth.push([days[k], false]);
         }
       }
-      let selected = month === new Date().getMonth() ? new Date().getDate() : 1;
+      let selected = new Date().getDate();
       let self = this;
       axios({
         method: "GET",
@@ -75,7 +84,7 @@ class App extends React.Component {
         res.data.forEach(el => {
           return (el.date = new Date(el.date));
         });
-        month === new Date().getMonth() ? datesByMonth[new Date().getDate() - 1][1] = true : datesByMonth[0][1] = true ;
+        datesByMonth[new Date().getDate() - 1][1] = true;
         self.setState({
           datesByMonth,
           selected,
@@ -84,10 +93,22 @@ class App extends React.Component {
       });
     }
   }
+  back() {
+    event.preventDefault();
+    this.setState({selectedTime: null})
+  }
+  submit(state) {
+    event.preventDefault();
+    axios({
+      method: 'PUT',
+      url: '/',
+      data: state
+    })
+    this.setState({selectedTime: null, appointmentsByMonth: [] })
+
+  }
 
   render() {
-    let initial = () => this.state.month === new Date().getMonth() ? new Date().getDate() - 1 : 0;
-    // console.log(initial)
     var settings = {
       dots: false,
       infinite: true,
@@ -114,6 +135,8 @@ class App extends React.Component {
 
     return (
       <div className="mainWrapper">
+        {this.state.selectedTime ? <PersonalInfo back={this.back} submit={this.submit} appointment={this.state.selectedTime}/> : 
+        (<div>
         <div id="monthSelector">
           {this.state.month !== new Date().getMonth() ? (
             <button
@@ -164,7 +187,7 @@ class App extends React.Component {
                   return el.date.getDate() === this.state.selected &&
                     el.date.getHours() < 17 &&
                     !el.booked ? (
-                    <TimePicker key={i} date={el} />
+                    <TimePicker key={i} date={el} select={this.selectTime} />
                   ) : null;
                 })
               : "No Appointments Found"}
@@ -176,12 +199,13 @@ class App extends React.Component {
                   return el.date.getDate() === this.state.selected &&
                     el.date.getHours() >= 17 &&
                     !el.booked ? (
-                    <TimePicker key={i} date={el} />
+                    <TimePicker key={i} date={el} select={this.selectTime} />
                   ) : null;
                 })
               : "No Appointments Found"}
           </div>
-        </div>
+          </div>
+        </div>)}
       </div>
     );
   }

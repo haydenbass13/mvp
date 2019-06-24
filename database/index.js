@@ -11,7 +11,8 @@ const Appointments = pg.define("appointments", {
   date: Sequelize.DATE,
   booked: Sequelize.BOOLEAN,
   firstName: Sequelize.STRING,
-  lastName: Sequelize.STRING
+  lastName: Sequelize.STRING,
+  phone: Sequelize.STRING
 });
 
 // const Employees = pg.define('employees', {
