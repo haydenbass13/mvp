@@ -13,6 +13,11 @@ const createPostgres = () => pgtools.createdb(config, "appointments");
 
 const { Appointments } = require("./index");
 
+const randomizer = () => {
+  let num = Math.floor(Math.random() * Math.floor(2));
+  return num === 1 ? true : false;
+};
+
 const seedPostgres = async i => {
   let date = new Date();
   let year = date.getFullYear();
@@ -23,7 +28,7 @@ const seedPostgres = async i => {
     for (var time = 9; time < 22; time++) {
       let day = {
         date: await new Date(year, month, j, time),
-        booked: false,
+        booked: randomizer(),
         firstName: null,
         lastName: null
       };

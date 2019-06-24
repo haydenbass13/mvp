@@ -8,9 +8,18 @@ import appointmentsByMonth from "../models/index";
 
 const router = express.Router();
 
+router.get("/:id", async (req, res) => {
+  await appointmentsByMonth(Number(req.params.id), response => {
+    console.log(response[0][0])
+    res.send(response[0]);
+  });
+});
+
+
 router.get("/", async (req, res) => {
   let month = new Date().getMonth();
   await appointmentsByMonth(month, response => {
+    console.log(response[0][0])
     const theHtml = `
   <head>
   <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
