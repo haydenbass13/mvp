@@ -4,13 +4,13 @@ import Radium, { StyleRoot } from "radium";
 
 const TimePicker = props => {
   return (
-    <div
+    <button
       className="timepicker"
       onClick={() => props.select(props.date)}
     >
       {props.date.date.getHours().toString()}:
       {props.date.date.getMinutes().toString()}0
-    </div>
+    </button>
   );
 };
 
